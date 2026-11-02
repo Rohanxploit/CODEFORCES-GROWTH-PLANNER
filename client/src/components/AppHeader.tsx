@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { LogOut, Menu, Moon, Sun, TrendingUp, X } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
+import { api } from '../services/api';
 import { cx } from './ui';
 
 const NAV = [
@@ -17,9 +18,15 @@ const NAV = [
 
 export function AppHeader() {
   const { theme, toggleTheme } = useTheme();
-  const { user, logout } = useAuth();
+  const { user, logout, refresh } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+
+  const onToggleTheme = () => {
+    toggleTheme();
+    // Signed-in users keep the choice on their account so it follows them across devices.
+    if (user) void api.updateMe({ preferences: { theme: theme === 'dark' ? 'light' : 'dark' } }).then(() => refresh(), () => undefined);
+  };
 
   const onLogout = async () => {
     await logout();
@@ -54,7 +61,7 @@ export function AppHeader() {
         <div className="flex items-center gap-1">
           <button
             type="button"
-            onClick={toggleTheme}
+            onClick={onToggleTheme}
             className="rounded-md p-2 text-zinc-600 hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-blue-500 dark:text-zinc-400 dark:hover:bg-zinc-800"
             aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
           >

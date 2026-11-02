@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Area, Bar, BarChart, CartesianGrid, ComposedChart, Legend, Line, LineChart, ResponsiveContainer, Scatter, Tooltip, XAxis, YAxis } from 'recharts';
+import { Area, Bar, BarChart, CartesianGrid, Cell, ComposedChart, Legend, Line, LineChart, ResponsiveContainer, Scatter, Tooltip, XAxis, YAxis } from 'recharts';
 import { SOLVING_STATUS_LABELS, type SolvingStatus } from '@cgp/shared';
 import { api } from '../services/api';
 import { useTheme } from '../context/ThemeContext';
@@ -42,7 +42,8 @@ function Analytics({ roadmapId }: { roadmapId: string }) {
   const tooltip = { contentStyle: { background: c.tooltipBg, border: `1px solid ${c.tooltipBorder}`, borderRadius: 6, fontSize: 12 } };
   const nothingYet = a.totals.problemsAttempted === 0 && a.totals.completedDays === 0;
   const weeklyUntilNow = a.weekly.filter((w) => w.week <= Math.ceil(a.currentDay / 7));
-  const progression = a.difficultyProgression.filter((d) => d.day <= a.currentDay);
+  // The planned band covers the whole plan; solved dots appear as outcomes are recorded.
+  const progression = a.difficultyProgression;
   const breakdown = (Object.keys(SOLVING_STATUS_LABELS) as SolvingStatus[])
     .filter((s) => s !== 'not-attempted')
     .map((s) => ({ status: SOLVING_STATUS_LABELS[s], count: a.solvingBreakdown[s], fill: STATUS_COLORS[s] }));
@@ -81,8 +82,8 @@ function Analytics({ roadmapId }: { roadmapId: string }) {
                   <YAxis allowDecimals={false} stroke={c.axis} fontSize={12} />
                   <Tooltip {...tooltip} labelFormatter={(w) => `Week ${w}`} />
                   <Legend wrapperStyle={{ fontSize: 12 }} />
-                  <Bar dataKey="plannedDays" name="Planned study days" fill={c.secondary} radius={[3, 3, 0, 0]} />
-                  <Bar dataKey="completedDays" name="Completed" fill={c.primary} radius={[3, 3, 0, 0]} />
+                  <Bar isAnimationActive={false} dataKey="plannedDays" name="Planned study days" fill={c.secondary} radius={[3, 3, 0, 0]} />
+                  <Bar isAnimationActive={false} dataKey="completedDays" name="Completed" fill={c.primary} radius={[3, 3, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -97,7 +98,11 @@ function Analytics({ roadmapId }: { roadmapId: string }) {
                   <XAxis type="number" allowDecimals={false} stroke={c.axis} fontSize={12} />
                   <YAxis type="category" dataKey="status" stroke={c.axis} fontSize={12} width={130} />
                   <Tooltip {...tooltip} />
-                  <Bar dataKey="count" name="Problems" radius={[0, 3, 3, 0]} />
+                  <Bar isAnimationActive={false} dataKey="count" name="Problems" radius={[0, 3, 3, 0]}>
+                    {breakdown.map((b) => (
+                      <Cell key={b.status} fill={b.fill} />
+                    ))}
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -113,8 +118,8 @@ function Analytics({ roadmapId }: { roadmapId: string }) {
                   <XAxis dataKey="day" stroke={c.axis} fontSize={12} tickFormatter={(d) => `D${d}`} />
                   <YAxis domain={['dataMin - 100', 'dataMax + 100']} stroke={c.axis} fontSize={12} />
                   <Tooltip {...tooltip} labelFormatter={(d) => `Day ${d}`} />
-                  <Area dataKey="band" name="Planned range" stroke="none" fill={c.primary} fillOpacity={0.15} />
-                  <Scatter dataKey="solvedRating" name="Hardest solved" fill={c.accent} />
+                  <Area isAnimationActive={false} dataKey="band" name="Planned range" stroke="none" fill={c.primary} fillOpacity={0.15} />
+                  <Scatter isAnimationActive={false} dataKey="solvedRating" name="Hardest solved" fill={c.accent} />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
@@ -162,7 +167,7 @@ function Analytics({ roadmapId }: { roadmapId: string }) {
                   <XAxis dataKey="date" stroke={c.axis} fontSize={11} />
                   <YAxis domain={['dataMin - 50', 'dataMax + 50']} stroke={c.axis} fontSize={12} />
                   <Tooltip {...tooltip} />
-                  <Line dataKey="newRating" name="Rating after contest" stroke={c.primary} strokeWidth={2} dot />
+                  <Line isAnimationActive={false} dataKey="newRating" name="Rating after contest" stroke={c.primary} strokeWidth={2} dot />
                 </LineChart>
               </ResponsiveContainer>
             </div>
