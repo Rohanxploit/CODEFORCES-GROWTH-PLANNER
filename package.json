@@ -1,0 +1,26 @@
+{
+  "name": "codeforces-growth-planner",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Personalized 90-day Codeforces training planner. Don't guess what to practice. Know exactly what to solve next.",
+  "license": "MIT",
+  "workspaces": [
+    "shared",
+    "server",
+    "client"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build:shared": "npm run build -w shared",
+    "dev:server": "npm run build:shared && npm run dev -w server",
+    "dev:client": "npm run build:shared && npm run dev -w client",
+    "build": "npm run build -w shared && npm run build -w server && npm run build -w client",
+    "typecheck": "npm run build:shared && npm run typecheck -w server && npm run typecheck -w client",
+    "test": "npm run build:shared && npm run test -w server"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,20 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Environment files: never commit secrets
+.env
+.env.*
+!.env.example
+
+# Local cache of the Codeforces problemset
+server/.cache/
+
+# Logs and OS / editor files
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
