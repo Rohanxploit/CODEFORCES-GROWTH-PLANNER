@@ -222,6 +222,8 @@ export interface RoadmapDTO {
   daysPerWeek: number;
   contestParticipation: boolean;
   mandatoryProblems: number;
+  /** Null when the count follows study hours automatically. */
+  mandatoryProblemsOverride: number | null;
   difficultyOffset: number;
   rampCapped: boolean;
   adaptations: AdaptationEntry[];

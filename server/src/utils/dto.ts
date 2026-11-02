@@ -41,6 +41,7 @@ export function toRoadmapDTO(r: IRoadmap): RoadmapDTO {
     daysPerWeek: r.daysPerWeek,
     contestParticipation: r.contestParticipation,
     mandatoryProblems: r.mandatoryProblems,
+    mandatoryProblemsOverride: r.mandatoryProblemsOverride ?? null,
     difficultyOffset: r.difficultyOffset,
     rampCapped: r.rampCapped,
     adaptations: r.adaptations ?? [],
