@@ -1,0 +1,31 @@
+# Render Blueprint for the API. Create it from the Render dashboard:
+# New + → Blueprint → select this repository.
+services:
+  - type: web
+    name: codeforces-growth-planner-api
+    runtime: node
+    plan: free
+    buildCommand: MONGOMS_DISABLE_POSTINSTALL=1 npm ci --include=dev && npm run build -w shared && npm run build -w server
+    startCommand: npm run start -w server
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      # Your Vercel URL, e.g. https://codeforces-growth-planner.vercel.app
+      - key: CORS_ORIGINS
+        sync: false
+      - key: COOKIE_SAME_SITE
+        value: lax
+      # Vercel's /api rewrite adds one proxy hop in front of Render's.
+      - key: TRUST_PROXY
+        value: 2
+      - key: CODEFORCES_API_BASE
+        value: https://codeforces.com/api

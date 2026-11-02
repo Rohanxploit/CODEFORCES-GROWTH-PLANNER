@@ -21,6 +21,9 @@ const envSchema = z.object({
   // Use "none" only if the frontend calls the API cross-site directly.
   COOKIE_SAME_SITE: z.enum(['lax', 'strict', 'none']).default('lax'),
   AUTH_RATE_LIMIT: z.coerce.number().int().positive().default(20),
+  // Proxy hops in front of the API: 1 on Render alone, 2 when the frontend
+  // proxies /api through Vercel (so req.ip is the real client for rate limits).
+  TRUST_PROXY: z.coerce.number().int().min(0).max(5).default(1),
 });
 
 export type Env = z.infer<typeof envSchema>;

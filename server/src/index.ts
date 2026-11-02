@@ -6,7 +6,7 @@ import { logger } from './utils/logger.js';
 async function main(): Promise<void> {
   await connectDatabase(env.MONGODB_URI);
 
-  const app = createApp({ corsOrigins: env.CORS_ORIGINS });
+  const app = createApp({ corsOrigins: env.CORS_ORIGINS, trustProxy: env.TRUST_PROXY });
   const server = app.listen(env.PORT, () => {
     logger.info(`Server listening on port ${env.PORT} (${env.NODE_ENV})`);
   });
