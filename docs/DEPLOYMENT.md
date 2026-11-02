@@ -2,7 +2,7 @@
 
 Target setup: **MongoDB Atlas** (database), **Render** (API, `render.yaml`), **Vercel** (frontend, `vercel.json`). Vercel serves the static app and rewrites `/api/*` to Render, so the browser only talks to one site and the session cookie is first-party (`SameSite=Lax`).
 
-> This guide has not been run against live accounts for this repository yet. Follow it and check each step's result.
+> This setup is running at https://codeforces-growth-planner-fj1f.vercel.app with the API on Render.
 
 ## 1. MongoDB Atlas
 

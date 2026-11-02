@@ -2,6 +2,8 @@
 
 **Don't guess what to practice. Know exactly what to solve next.**
 
+**Live demo:** https://codeforces-growth-planner-fj1f.vercel.app
+
 A personalised 90-day training planner for Codeforces. You give it your current rating (or your handle), a target rating and the time you have; it builds a day-by-day plan with the concept to learn, real Codeforces problems to solve, an optional stretch problem, revision tasks, contest days and what to do when you get stuck. It then tracks how you solve, not just whether you solved, and adapts the remaining days to your feedback.
 
 ![Dashboard](docs/screenshots/dashboard.png)
@@ -280,7 +282,7 @@ The latest run generated plans for six profiles (0 → 400 through 2000 → 2150
 
 The frontend deploys to Vercel, the API to Render, and data to MongoDB Atlas. Vercel rewrites `/api/*` to Render, so the session cookie stays first-party. Step-by-step guide: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
-This repository has not been deployed yet; there is no public URL.
+Live: https://codeforces-growth-planner-fj1f.vercel.app (API on Render free tier; the first request after idle can take up to a minute).
 
 ## Limitations
 
