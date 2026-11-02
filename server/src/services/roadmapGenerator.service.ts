@@ -45,6 +45,9 @@ export interface DailyPlanDraft {
   concept: string;
   whyItMatters: string;
   prerequisites: string[];
+  /** Tags used for selection, kept so a problem can be replaced with the same rules later. */
+  topicTags: string[];
+  fallbackTags: string[];
   learnMinutes: number;
   practiceMinutes: number;
   difficulty: RatingRange;
@@ -163,7 +166,8 @@ export function generateRoadmap(catalog: readonly CatalogProblem[], input: Roadm
   const stuckMinutes = hours < 1.5 ? 20 : 30;
   const offsetFromDay = input.offsetFromDay ?? 1;
 
-  const drafts: DailyPlanDraft[] = [];
+  const drafts: Omit<DailyPlanDraft, 'topicTags' | 'fallbackTags'>[] = [];
+  const tagsByDay = new Map<number, { topicTags: string[]; fallbackTags: string[] }>();
   let lastPhase: PhaseNumber = 1;
   let pendingUpsolve = false;
   const recentTopics: TopicDefinition[] = [];
@@ -182,6 +186,7 @@ export function generateRoadmap(catalog: readonly CatalogProblem[], input: Roadm
     };
 
     const select = (name: string, tags: string[], fallback: string[], range: RatingRange, stretch: RatingRange | null, mandatory = mandatoryCount) => {
+      tagsByDay.set(dayNumber, { topicTags: tags, fallbackTags: fallback });
       const { problems, notes } = selectDailyProblems(
         ratedCatalog,
         { topicName: name, topicTags: tags, fallbackTags: fallback, range, stretchRange: stretch, mandatoryCount: mandatory, seed: input.seed, maxSolvedByRating: solvedIndex },
@@ -455,7 +460,7 @@ export function generateRoadmap(catalog: readonly CatalogProblem[], input: Roadm
     topics: plannedTopics.map((t) => t.name),
     revisionTopics: topicPlan.revisionTopics.map((t) => t.name),
     deferredTopics: topicPlan.deferredTopics.map((t) => t.name),
-    days: drafts,
+    days: drafts.map((d) => ({ ...d, ...(tagsByDay.get(d.dayNumber) ?? { topicTags: [], fallbackTags: [] }) })),
     notes,
   };
 }

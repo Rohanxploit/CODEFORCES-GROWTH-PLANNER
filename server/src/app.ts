@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
-import { healthRouter } from './routes/health.routes.js';
+import { createApiRouter } from './routes/index.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
 export interface AppOptions {
@@ -27,7 +27,7 @@ export function createApp({ corsOrigins }: AppOptions) {
   app.use(express.json({ limit: '100kb' }));
   app.use(cookieParser());
 
-  app.use('/api/health', healthRouter);
+  app.use('/api', createApiRouter());
 
   app.use(notFoundHandler);
   app.use(errorHandler);

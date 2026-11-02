@@ -17,6 +17,10 @@ const envSchema = z.object({
         .filter(Boolean),
     ),
   CODEFORCES_API_BASE: z.string().url().default('https://codeforces.com/api'),
+  // "lax" works when the frontend proxies /api on the same site (recommended).
+  // Use "none" only if the frontend calls the API cross-site directly.
+  COOKIE_SAME_SITE: z.enum(['lax', 'strict', 'none']).default('lax'),
+  AUTH_RATE_LIMIT: z.coerce.number().int().positive().default(20),
 });
 
 export type Env = z.infer<typeof envSchema>;
