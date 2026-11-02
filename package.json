@@ -15,6 +15,7 @@
   "scripts": {
     "build:shared": "npm run build -w shared",
     "dev:server": "npm run build:shared && npm run dev -w server",
+    "dev:db": "npm run dev:db -w server",
     "dev:client": "npm run build:shared && npm run dev -w client",
     "build": "npm run build -w shared && npm run build -w server && npm run build -w client",
     "typecheck": "npm run build:shared && npm run typecheck -w server && npm run typecheck -w client",

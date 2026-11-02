@@ -10,6 +10,7 @@ coverage/
 
 # Local cache of the Codeforces problemset
 server/.cache/
+server/.mongo-data/
 
 # Logs and OS / editor files
 *.log
